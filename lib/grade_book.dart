@@ -21,9 +21,17 @@ enum Grade {
   // TODO 3: Move `letterGrade` from bin/grade_book_v0.dart here. Loop over
   // Grade.values and return the first grade whose minAverage is not above
   // the average.
-  static Grade forAverage(double average) {
-    return Grade.f;
+  
+static Grade forAverage(double average) {
+  for (var grade in Grade.values) {
+    if (grade.minAverage <= average) {
+      return grade;
+    }
   }
+
+  return Grade.f;
+}
+
 }
 
 class Student {
@@ -48,9 +56,16 @@ class Student {
 
   // TODO 4: Move `average` from bin/grade_book_v0.dart here. Return null if
   // there are no marks; otherwise add up the marks and divide by how many.
-  double? get average {
+  
+double? get average {
+  if (_marks.isEmpty) {
     return null;
   }
+
+  var total = _marks.reduce((a, b) => a + b);
+  return total / _marks.length;
+}
+
 
   /// Null safety: `average` may be null, so `grade` may be null too. Copy the
   /// getter into a local variable first, then check it.
@@ -90,9 +105,11 @@ class GradeBook {
 
   // TODO 5: Return the student with this name, or null if there is none.
   // A Map lookup already gives exactly that.
-  Student? find(String name) {
-    return null;
-  }
+  
+Student? find(String name) {
+  return _students[name];
+}
+
 
   /// Null safety: `find` may return null, so check before using the student.
   bool addMark(String name, int mark) {
@@ -106,9 +123,25 @@ class GradeBook {
   // TODO 6: Move `topStudent` from bin/grade_book_v0.dart here. Return the
   // student with the highest average, or null if no student has marks.
   // The old version returns a name; this one returns the Student.
-  Student? get topStudent {
-    return null;
+ 
+Student? get topStudent {
+  Student? top;
+
+  for (var student in _students.values) {
+    var currentAverage = student.average;
+
+    if (currentAverage == null) {
+      continue;
+    }
+
+    if (top == null || currentAverage > top.average!) {
+      top = student;
+    }
   }
+
+  return top;
+}
+
 
   String report() {
     var lines = <String>[];

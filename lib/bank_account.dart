@@ -5,14 +5,14 @@
 class BankAccount {
   // TODO 1: Add an initializer list that sets `_balance` from
   // `openingBalance`, and remove the `= 0` from the field below.
-  BankAccount(this.owner, {int openingBalance = 0});
-
+  BankAccount(this.owner, {int openingBalance = 0})
+    : _balance = openingBalance;
   /// `final`: set once, in the constructor, and never changed.
   final String owner;
 
   /// Encapsulation: `_balance` is private to this file. Only the methods
   /// below can change it, so the balance can never go wrong.
-  int _balance = 0;
+  int _balance;
 
   /// A getter: read it like a field, `account.balance`, but nobody can set it.
   int get balance => _balance;
@@ -58,7 +58,14 @@ class SavingsAccount extends BankAccount {
   // TODO 2: Override withdraw. If the balance after the withdrawal would be
   // below minimumBalance, return false. Otherwise use BankAccount's withdraw
   // (call it with `super.`).
+@override
+bool withdraw(int amount) {
+  if (balance - amount < minimumBalance) {
+    return false;
+  }
 
+  return super.withdraw(amount);
+}
   /// Polymorphism: `print` on a SavingsAccount runs this version.
   @override
   String toString() => '${super.toString()} (savings, $interestPercent%)';
